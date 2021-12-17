@@ -40,13 +40,13 @@ Recursive algorithm determining the existence of a unique solution for the Dissi
 **INPUT**:\
 `B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays et al. (2022)]. \
 `ω`: Vector of natural frequencies of the oscillators.\
-`H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For e = 1:m, H[e](f) = h[e](h[e+m]^{-1}(f)) and for e = m+1:2m, H[e](f) = h[e](h[e-m]^{-1}(f)). \
+`H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For `e = 1:m`, `H[e](f) = h[e](h[e+m]^{-1}(f))` and for `e = m+1:2m`, `H[e](f) = h[e](h[e-m]^{-1}(f))`. \
 `hγ`: Vector of tuples of the lower and upper bounds of the domain of the transfer functions.\
 `ϵ`: Correction parameter to avoid evaluating the transfer functions exactly at the boundary of their domain.
 
 **OUTPUT**:\
 `exists`: Returns true if a solution exists. If it does, then it is unique [Delabays et al. (2022)].\
-`ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For e = 1:m (resp. e = m+1:2m), ff[e] is the flow over the edge defined by B0[:,e] (resp. -B0[:,e]).\
+`ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For `e = 1:m` (resp. `e = m+1:2m`), `ff[e]` is the flow over the edge defined by `B0[:,e]` (resp. `-B0[:,e]`).\
 `φ`: Synchronous frequency corresponding the solution.
 
 ---
@@ -154,7 +154,7 @@ Computes the zero of the function `F` in the interval [`l`,`u`] with tolerance `
 
 - `hs(x::Float64, h::Function, γ::Tuple{Float64,Float64}, s::Float64=1.)`
 
-Extended coupling function, extending `h` to the whole real axis. Matches `h` on [`γ`[1],`γ`[2]], is continuous, and has slope `s` outside of [`γ`[1],`γ`[2]]. 
+Extended coupling function, extending `h` to the whole real axis. Matches `h` on [`γ[1]`,`γ[2]`], is continuous, and has slope `s` outside of [`γ[1]`,`γ[2]`]. 
 
 **INPUT**:\
 `x`: Argument of the extended coupling function. \
