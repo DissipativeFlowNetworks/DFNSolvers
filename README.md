@@ -1,6 +1,6 @@
 # DFNSolvers
 Companion codes to the paper [Delabays et al (2022)]. 
-Proposes codes to solve the Dissipative Network Flow Problem on general network structures.
+Solves the Dissipative Network Flow problem for general graph structures. 
 
 ## Summary of the files
 - **acyclic\_algorithm.jl**: Loads the scripts for computing the DFN solution for acyclic networks. 
