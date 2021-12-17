@@ -10,9 +10,87 @@ Proposes codes to solve the Dissipative Network Flow Problem on general network 
 - **toolbox.jl**: Loads a list of tools useful for the code and for more general purposes.
 
 ## List of functions
+- [acyclic\_algorithm](#acyclic\_algorithm)
+- [hs](#hs)
+- [iterations](#iterations)
 - [run\_acyclic\_algorithm](#run\_acyclic\_algorithm)
+- [Sδ](#Sδ)
 
 ## Detailed documentation for the functions
+
+### acyclic\_aglorithm
+*./acyclic\_algorithm.jl*
+
+- `acyclic\_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)`
+	
+Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2021)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
+
+_INPUT_:\
+`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays et al. (2022)]. \
+`ω`: Vector of natural frequencies of the oscillators.\
+`H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For e = 1:m, H[e](f) = h[e](h[e+m]^{-1}(f)) and for e = m+1:2m, H[e](f) = h[e](h[e-m]^{-1}(f)). \
+`hγ`: Vector of tuples of the lower and upper bounds of the domain of the transfer functions.\
+`ϵ`: Correction parameter to avoid evaluating the transfer functions exactly at the boundary of their domain.
+
+_OUTPUT_:\
+`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays et al. (2022)].\
+`ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For e = 1:m (resp. e = m+1:2m), ff[e] is the flow over the edge defined by B0[:,e] (resp. -B0[:,e]).\
+`φ`: Synchronous frequency corresponding the solution.
+
+---
+
+### hs
+*./cyclic\_iterations.jl*
+
+- `hs(x::Float64, h::Function, γ::Tuple{Float64,Float64}, s::Float64=1.)`
+
+Extended coupling function, extending `h` to the whole real axis. Matches `h` on [`γ`[1],`γ`[2]], is continuous, and has slope `s` outside of [`γ`[1],`γ`[2]]. 
+
+**INPUT**:\
+`x`: Argument of the extended coupling function. \
+`h`: Coupling function to be extended. \
+`γ`: Tuple of the two bounds of the domain of `h`. \
+`s`: Slope of the extended coupling function outside of the domain of `h`. \
+
+**OUTPUT**:\
+`hx`: h_s(x).
+
+- `hs(x::Vector{Float64}, h::Vector{Function}, γ::Vector{Tuple{Float64,Float64}}, s::Union{Float64,Vector{Float64}})`
+
+Computes the value of the extended coupling function elementwise on `x`, `h`, `γ`, and `s`. 
+
+- `hs(x::Vector{Float64}, h::Function, γ::Tuple{Float64,Float64}, s::Float64)`
+
+Computes the value of the extended coupling function elementwise on `x`.
+
+---
+
+### iterations
+*./cyclic\_iterations.jl*
+
+- `iterations(Δ0::Vector{Float64}, B::Matrix{Float64}, C::Matrix{Float64}, u::Vector{Int64}, ω::Vector{Float64}, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float,Float64},Vector{Tuple{Float64,Float64}}}, δ::Float64, s::Union{Float64,Vector{Float64}}=1., max_iter::Int64=100, tol::Float64=1e-6, verb::Bool=false)`
+
+Runs the iteration scheme described in [Delabays et al. (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
+
+**INPUT**:\
+`Δ0`: Initial conditions of the iterations. Each component should ideally be bounded by the corresponding components of `γ`. \
+`B`: Incidence matrix of the (undirected) graph. \
+`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays et al. (2022)]. \
+`u`: Winding vector of the cell where the solution is searched. \
+`ω`: Vector of natural frequencies. \
+`h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogenous. \
+`γ`: Vector of tuples, composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is strictly increasing. \
+`δ`: Scaling parameter. \
+`s`: Slope of the extended coupling functions. Should have the same dimension as `h`. \
+`max_iter`: Maximal number of iterations allowed. \
+`tol`: Minimal correction allowed between two iterations. \
+`verb`: If true, enumerates the iterations.
+
+**OUTPUT**:\
+`Δ`: Final state at the end of the iterations. \
+`Δs`: Sequence of states along the iterations. 
+
+---
 
 ### run\_acyclic\_algorithm
 *./acyclic\_algorithm.jl*
@@ -37,98 +115,30 @@ Runs the algorithm to decide if a solution exist for the Dissipative Flow Proble
 
 ---
 
-"""
-	acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)
-	
-Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2021)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
+### Sδ
+*./cyclic\_iterations.jl*
 
-_INPUT_:\\
-`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays, Jafarpour, and Bullo (2021)]. \\
-`ω`: Vector of natural frequencies of the oscillators.\\
-`H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For e = 1:m, H[e](f) = h[e](h[e+m]^{-1}(f)) and for e = m+1:2*m, H[e](f) = h[e](h[e-m]^{-1}(f)). \\
-`hγ`: Vector of tuples of the lower and upper bounds of the domain of the transfer functions.\\
-`ϵ`: Correction parameter to avoid evaluating the transfer functions exactly at the boundary of their domain.
-
-_OUTPUT_:\\
-`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays, Jafarpour, and Bullo (2021)].\\
-`ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For e = 1:m (resp. e = m+1:2*m), ff[e] is the
-  flow over the edge defined by B0:,e (resp. -B0[:,e]).\\
-`φ`: Synchronous frequency corresponding the solution.
-"""
-
-### cyclic\_iterations.jl
-
-"""
-	iterations(Δ0::Vector{Float64}, B::Matrix{Float64}, C::Matrix{Float64}, u::Vector{Int64}, ω::Vector{Float64}, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float,Float64},Vector{Tuple{Float64,Float64}}}, δ::Float64, s::Union{Float64,Vector{Float64}}=1., max_iter::Int64=100, tol::Float64=1e-6, verb::Bool=false)
-
-Runs the iteration scheme described in [Delabays et al. (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
-
-_INPUT_:\\
-`Δ0`: Initial conditions of the iterations. Each component should ideally be bounded by the corresponding components of `γ`. \\
-`B`: Incidence matrix of the (undirected) graph. \\
-`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays et al. (2022)]. \\
-`u`: Winding vector of the cell where the solution is searched. \\
-`ω`: Vector of natural frequencies. \\
-`h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogenous. \\
-`γ`: Vector of tuples, composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is strictly increasing. \\
-`δ`: Scaling parameter. \\
-`s`: Slope of the extended coupling functions. Should have the same dimension as `h`. \\
-`max_iter`: Maximal number of iterations allowed. \\
-`tol`: Minimal correction allowed between two iterations. \\
-`verb`: If true, enumerates the iterations.
-
-_OUTPUT_:\\
-`Δ`: Final state at the end of the iterations. \\
-`Δs`: Sequence of states along the iterations. 
-"""
-
-"""
-	Sδ(Δ::Vector{Float64}, ω::Vector{Float64}, B::Matrix{Float64}, Bout::Matrix{Float64}, P::Matrix{Float64}, W::Matrix{Float64}, δ::Float64, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float64,Float64},Vector{Tuple{Float64,Float64}}}, s::Union{Float64,Vector{Float64}}=1.)
+- `Sδ(Δ::Vector{Float64}, ω::Vector{Float64}, B::Matrix{Float64}, Bout::Matrix{Float64}, P::Matrix{Float64}, W::Matrix{Float64}, δ::Float64, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float64,Float64},Vector{Tuple{Float64,Float64}}}, s::Union{Float64,Vector{Float64}}=1.)`
 
 Iteration functions whose fixed points are solutions to the Dissipative Network Flow problem [Delabays et al. (2022)]. 
 
-_INPUT_:\\
-`Δ`: Argument of the interation function. \\
-`ω`: Vector of natural frequencies. \\
-`B`: Incidence matrix of the (undirected) graph. \\
-`Bout`: Out-incidence matrix of the bidirected graph. \\
-`P`: Cycle projection matrix (see [Delabays et al. (2022)]. \\
-`W`: Weight matrix to be tuned. In [Delabays et al. (2022)], we take the pseudoinverse of the Laplacian. \\
-`δ`: Scaling parameter which, if small enough, guarantees `Sδ` to be contracting. \\
-`h`: Vector of the (directed) coupling functions. If a single `Function` is given, the couplings are assumed homogeneous. \\
-`γ`: Vector of tuples composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is stricly increasing. Should have the same dimension as `h`. \\
+**INPUT**:\
+`Δ`: Argument of the interation function. \
+`ω`: Vector of natural frequencies. \
+`B`: Incidence matrix of the (undirected) graph. \
+`Bout`: Out-incidence matrix of the bidirected graph. \
+`P`: Cycle projection matrix (see [Delabays et al. (2022)]. \
+`W`: Weight matrix to be tuned. In [Delabays et al. (2022)], we take the pseudoinverse of the Laplacian. \
+`δ`: Scaling parameter which, if small enough, guarantees `Sδ` to be contracting. \
+`h`: Vector of the (directed) coupling functions. If a single `Function` is given, the couplings are assumed homogeneous. \
+`γ`: Vector of tuples composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is stricly increasing. Should have the same dimension as `h`. \
 `s`: Slope of the extended coupling functions, outside of their domain. 
 
-_OUTPUT_:\\
+**OUTPUT**:\
 `Δ2`: Updated value of the state `Δ`.
-"""
 
-"""
-	hs(x::Float64, h::Function, γ::Tuple{Float64,Float64}, s::Float64=1.)
+---
 
-Extended coupling function, extending `h` to the whole real axis. Matches `h` on [`γ`[1],`γ`[2]], is continuous, and has slope `s` outside of [`γ`[1],`γ`[2]]. 
-
-_INPUT_:\\
-`x`: Argument of the extended coupling function. \\
-`h`: Coupling function to be extended. \\
-`γ`: Tuple of the two bounds of the domain of `h`. \\
-`s`: Slope of the extended coupling function outside of the domain of `h`. \\
-
-_OUTPUT_:\\
-`hx`: h_s(x).
-"""
-
-"""
-	hs(x::Vector{Float64}, h::Vector{Function}, γ::Vector{Tuple{Float64,Float64}}, s::Union{Float64,Vector{Float64}})
-
-Computes the value of the extended coupling function elementwise on `x`, `h`, `γ`, and `s`. 
-"""
-
-"""
-	hs(x::Vector{Float64}, h::Function, γ::Tuple{Float64,Float64}, s::Float64)
-
-Computes the value of the extended coupling function elementwise on `x`.
-"""
 
 ### toolbox.jl
 
