@@ -10,11 +10,11 @@ Proposes codes to solve the Dissipative Network Flow Problem on general network 
 - **toolbox.jl**: Loads a list of tools useful for the code and for more general purposes.
 
 ## List of functions
-- [run\_acyclic\_algorithm](#runacyclicalgorithm)
+- [run\_acyclic\_algorithm](#run\_acyclic\_algorithm)
 
 ## Detailed documentation for the functions
 
-### run\_acyclic\_algorithm {#runacyclicalgorithm}
+### run\_acyclic\_algorithm
 *./acyclic\_algorithm.jl*
 
 - `run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, ω::Vector{Float64}, h::Function, hi::Function, γ::Tuple{Float64,Float64})`
@@ -27,13 +27,13 @@ Runs the algorithm to decide if a solution exist for the Dissipative Flow Proble
 `ω`: Vector of natural frequencies of the oscillators. \
 `h`: Coupling function(s) over the edges of the interaction graph. If a single function is given, the couplings are assumed to identical. Otherwise, a (2m)-vector of functions needs to be given. Edge indexing is such that for e = 1:m, the orientation of e corresponds to the one given by the e-th column of B, and for e = m+1:2m, the orientation of e is the opposite of edge e-m.\
 `hi`: Inverse(s) of the coupling function(s). \
-`γ`: Tuple(s) of the lower and upper bounds on the argument of the coupling function(s) `h`, such that they are strictly increasing. Dimension is the same as `h`.\
+`γ`: Tuple(s) of the lower and upper bounds on the argument of the coupling function(s) `h`, such that they are strictly increasing. Dimension is the same as `h`.
 
 **OUTPUT**:\
 `exists`: Returns true only if a solution exists. If the solution exists, then it is unique [Delabays, Jafarpour, and Bullo (2021)].\
 `θ`: Solution (if it exists) of the Dissipative Flow Network problem, defined up to a constant angle shift. \
 `ff`: Vector (of dimension 2m) of flows on the edges. For e = 1:m (resp. e = m+1:2m), ff[e] is the flow over the edge defined by B0[:,e] (resp. -B0[:,e]).\
-`φ`: Synchronous frequency corresponding to the solution. \
+`φ`: Synchronous frequency corresponding to the solution. 
 
 ---
 
