@@ -1,6 +1,6 @@
 # DFNSolvers
 Companion codes to the paper [Delabays et al (2022)]. 
-Solves the Dissipative Network Flow problem for general graph structures. 
+Solves the Dissipative Flow Network problem for general graph structures. 
 
 ## Summary of the files
 - **acyclic\_algorithm.jl**: Loads the scripts for computing the DFN solution for acyclic networks. 
@@ -321,7 +321,7 @@ Runs the algorithm to decide if a solution exist for the Dissipative Flow Proble
 
 - `Sδ(Δ::Vector{Float64}, ω::Vector{Float64}, B::Matrix{Float64}, Bout::Matrix{Float64}, P::Matrix{Float64}, W::Matrix{Float64}, δ::Float64, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float64,Float64},Vector{Tuple{Float64,Float64}}}, s::Union{Float64,Vector{Float64}}=1.)`
 
-Iteration functions whose fixed points are solutions to the Dissipative Network Flow problem [Delabays et al. (2022)]. 
+Iteration functions whose fixed points are solutions to the Dissipative Flow Network problem [Delabays et al. (2022)]. 
 
 **INPUT**:\
 `Δ`: Argument of the interation function. \
