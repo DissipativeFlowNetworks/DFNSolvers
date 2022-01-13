@@ -14,7 +14,7 @@ _INPUT_:\\
 `C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays et al. (2022)]. \\
 `u`: Winding vector of the cell where the solution is searched. \\
 `ω`: Vector of natural frequencies. \\
-`h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogenous. \\
+`h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogeneous. \\
 `γ`: Vector of tuples, composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is strictly increasing. \\
 `δ`: Scaling parameter. \\
 `s`: Slope of the extended coupling functions. Should have the same dimension as `h`. \\
