@@ -1,3 +1,5 @@
+using SparseArrays, DelimitedFiles
+
 include("acyclic_algorithm.jl")
 include("cyclic_iterations.jl")
 include("toolbox.jl")
@@ -8,15 +10,20 @@ include("toolbox.jl")
 @info "Running the acyclic algorithm on a spanning tree of RTS-96."
 @info "----------------------------------------------------------------"
 
-Lst = readdlm("ntw_data/rts96_spantree_L.csv",',')
-Yst = readdlm("ntw_data/rts96_spantree_Lg.csv",',') + im*readdlm("ntw_data/rts96_spantree_Lb.csv",',')
-id_st = Int64.(vec(readdlm("ntw_data/rts96_ids_spantree.csv",',')))
+Gsp = readdlm("ntw_data/myRTS96_spantree_G.csv",',')
+G = sparse(Int64.(Gsp[:,1]),Int64.(Gsp[:,2]),Gsp[:,3])
+Bsp = readdlm("ntw_data/myRTS96_spantree_B.csv",',')
+B = sparse(Int64.(Bsp[:,1]),Int64.(Bsp[:,2]),Bsp[:,3])
+Yst = Matrix(G + im*B)
 
-ω = vec(readdlm("ntw_data/rts96_w_om.csv",','))
+id_st = Int64.(vec(readdlm("ntw_data/myRTS96_ids_spantree.csv",',')))
 
-h,hi,γ,Bst = load_ksakaguchi(Yst)
+ω = vec(readdlm("ntw_data/myRTS96_om.csv",','))
 
-exists,θ,ff,φ = run_acyclic_algorithm(Bst,ω,h,hi,γ)
+h,hi,γ,Bst,as,ϕs = load_ksakaguchi(Yst)
+Bstd = pinv(Bst)
+
+exists,θ,ff,φ = run_acyclic_algorithm(Bst,.8*ω,h,hi,γ)
 
 if exists
 	dθ = cohesiveness_inc(θ,Bst)
@@ -31,28 +38,28 @@ end
 @info "Running the cyclic iterations on RTS-96, in three winding cells (u1, u2, and u3)."
 @info "----------------------------------------------------------------"
 
-L = readdlm("ntw_data/rts96_w2_L.csv",',')
-B,w,Bt = L2B(L)
-ϕs = vec(readdlm("ntw_data/rts96_w2_phi.csv",','))
-Bstd = pinv(Bst)
+Gsp = readdlm("ntw_data/myRTS96_G.csv",',')
+G = sparse(Int64.(Gsp[:,1]),Int64.(Gsp[:,2]),Gsp[:,3])
+Bsp = readdlm("ntw_data/myRTS96_B.csv",',')
+B = sparse(Int64.(Bsp[:,1]),Int64.(Bsp[:,2]),Bsp[:,3])
+Y = Matrix(G + im*B)
 
-include("ntw_data/rts96_cycles.jl")
+include("ntw_data/myRTS96_cycles.jl")
 
-u1 = Int64.(vec(readdlm("ntw_data/rts96_w_u1.csv",',')))
-u2 = Int64.(vec(readdlm("ntw_data/rts96_w_u2.csv",',')))
-u3 = Int64.(vec(readdlm("ntw_data/rts96_w_u3.csv",',')))
+u1 = Int64.(vec(readdlm("ntw_data/myRTS96_u1.csv",',')))
+u2 = Int64.(vec(readdlm("ntw_data/myRTS96_u2.csv",',')))
+u3 = Int64.(vec(readdlm("ntw_data/myRTS96_u3.csv",',')))
 
-ω = vec(readdlm("ntw_data/rts96_w2_om.csv",','))
+ω = vec(readdlm("ntw_data/myRTS96_om.csv",','))
 
-h,hi,γ = load_ksakaguchi([w;w],[ϕs;ϕs])
+h,hi,γ,B,as,ϕs = load_ksakaguchi(Y)
+
 Bb = [B -B]
 Bout = Bb.*(Bb .> 1e-2)
 n,m = size(B)
 
 δ = .01
-
 s = 1.
-
 max_iter = 1000
 tol = 1e-5
 
@@ -72,9 +79,9 @@ else
 	@info "Winding vector does not match."
 end
 if maximum(res1) - minimum(res1) > 1e-2
-	@info "Did not find a solution."
+	@info "Did not find a synchronous solution."
 else
-	@info "Found a solution, stored in θ1."
+	@info "Found a synchronous solution, stored in θ1."
 end
 @info "----------------------------------------------------------------"
 
@@ -92,9 +99,9 @@ else
 	@info "Winding vector does not match."
 end
 if maximum(res2) - minimum(res2) > 1e-2
-	@info "Did not find a solution."
+	@info "Did not find a synchronous solution."
 else
-	@info "Found a solution, stored in θ2."
+	@info "Found a synchronous solution, stored in θ2."
 end
 @info "----------------------------------------------------------------"
 
@@ -111,9 +118,9 @@ else
 	@info "Winding vector does not match."
 end
 if maximum(res3) - minimum(res3) > 1e-2
-	@info "Did not find a solution."
+	@info "Did not find a synchronous solution."
 else
-	@info "Found a solution, stored in θ3."
+	@info "Found a synchronous solution, stored in θ3."
 end
 @info "================================================================"
 
