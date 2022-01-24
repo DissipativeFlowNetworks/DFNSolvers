@@ -1,5 +1,5 @@
 # DFNSolvers
-Companion codes to the paper [Delabays, Jafarpour, and Bullo (2022)]. 
+Companion codes to the paper [Delabays, Jafarpour, and Bullo *under preparation* (2022)]. 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
 ## Summary of the files
