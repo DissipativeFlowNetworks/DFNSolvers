@@ -2,6 +2,9 @@
 Companion codes to the paper [Delabays, Jafarpour, and Bullo *under preparation* (2022)]. 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
+[![DOI](https://zenodo.org/badge/439436014.svg)](https://zenodo.org/badge/latestdoi/439436014)
+
+
 ## Summary of the files
 - **acyclic\_algorithm.jl**: Loads the scripts for computing the DFN solution for acyclic networks. 
 - **cyclic\_iterations.jl**: Loads the scripts for computing the DFN solutions for general, cyclic graphs. 
