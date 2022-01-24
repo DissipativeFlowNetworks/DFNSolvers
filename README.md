@@ -1,5 +1,5 @@
 # DFNSolvers
-Companion codes to the paper [Delabays et al (2022)]. 
+Companion codes to the paper [Delabays, Jafarpour, and Bullo (2022)]. 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
 ## Summary of the files
@@ -36,17 +36,17 @@ Solves the Dissipative Flow Network problem for general graph structures.
 
 - `acyclic\_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)`
 	
-Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2021)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
+Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2022)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
 
 **INPUT**:\
-`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays et al. (2022)]. \
+`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays, Jafarpour, and Bullo (2022)]. \
 `ω`: Vector of natural frequencies of the oscillators.\
 `H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For `e = 1:m`, `H[e](f) = h[e](h[e+m]^{-1}(f))` and for `e = m+1:2m`, `H[e](f) = h[e](h[e-m]^{-1}(f))`. \
 `hγ`: Vector of tuples of the lower and upper bounds of the domain of the transfer functions.\
 `ϵ`: Correction parameter to avoid evaluating the transfer functions exactly at the boundary of their domain.
 
 **OUTPUT**:\
-`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays et al. (2022)].\
+`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays, Jafarpour, and Bullo (2022)].\
 `ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For `e = 1:m` (resp. `e = m+1:2m`), `ff[e]` is the flow over the edge defined by `B0[:,e]` (resp. `-B0[:,e]`).\
 `φ`: Synchronous frequency corresponding the solution.
 
@@ -89,7 +89,7 @@ Computes the maximal (in absolute value) angular difference over the edges, usin
 
 - `cycle_proj(B::Matrix{Float64}, w::Vector{Float64}=Float64[])`
 
-Returns the cycle projection matrix `P`, possibly weighted by the weight vector `w`. See [Jafarpour et al., SIAM Review (2021)] for details.
+Returns the cycle projection matrix `P`, possibly weighted by the weight vector `w`. See [Jafarpour et al., SIAM Review (2022)] for details.
 
 **INPUT**:\
 `B`: Incidence matrix of the (undirected) graph.\
@@ -183,12 +183,12 @@ Computes the value of the extended coupling function elementwise on `x`.
 
 - `iterations(Δ0::Vector{Float64}, B::Matrix{Float64}, C::Matrix{Float64}, u::Vector{Int64}, ω::Vector{Float64}, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float,Float64},Vector{Tuple{Float64,Float64}}}, δ::Float64, s::Union{Float64,Vector{Float64}}=1., max_iter::Int64=100, tol::Float64=1e-6, verb::Bool=false)`
 
-Runs the iteration scheme described in [Delabays et al. (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
+Runs the iteration scheme described in [Delabays, Jafarpour, and Bullo (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
 
 **INPUT**:\
 `Δ0`: Initial conditions of the iterations. Each component should ideally be bounded by the corresponding components of `γ`. \
 `B`: Incidence matrix of the (undirected) graph. \
-`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays et al. (2022)]. \
+`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays, Jafarpour, and Bullo (2022)]. \
 `u`: Winding vector of the cell where the solution is searched. \
 `ω`: Vector of natural frequencies. \
 `h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogenous. \
@@ -260,7 +260,7 @@ Loads the coupling functions, their inverse, their domain bounds, and the incide
 
 - `reindex(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, id::Vector{Int64}=Int64[], ed::Vector{Int64}=Int64[])`
 
-Re-orders the nodes and edges of the graph to satisfy the conditions for Theorem XXX [Delabays, Jafarpour, and Bullo (2021)] to apply. 
+Re-orders the nodes and edges of the graph to satisfy the conditions for the `acyclic_algorithm` to apply. 
 
 **INPUT**:\
 `B`: Incidence matrix of the _bidirected_ graph. \
@@ -299,7 +299,7 @@ Recursively defines the flow over an edge as a function of the synchronous frequ
 - `run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, ω::Vector{Float64}, h::Function, hi::Function, γ::Tuple{Float64,Float64})`
 - `run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, ω::Vector{Float64}, h::Vector{Function}, hi::Vector{Function}, γ::Vector{Tuple{Float64,Float64}})`
 
-Runs the algorithm to decide if a solution exist for the Dissipative Flow Problem [Delabays et al. (2022)] on an acyclic graph. The nodes and edges of the graph are first reordered in order to match requirements described in the paper. Then the original numbering is retrieved.
+Runs the algorithm to decide if a solution exist for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2022)] on an acyclic graph. The nodes and edges of the graph are first reordered in order to match requirements described in the paper. Then the original numbering is retrieved.
 
 **INPUT**:\
 `B`: Incidence matrix of the graph considered, with n vertices and m edges. The graph is considered undirected and unweighted (weights can be incorporated in the coupling functions).\
@@ -321,7 +321,7 @@ Runs the algorithm to decide if a solution exist for the Dissipative Flow Proble
 
 - `Sδ(Δ::Vector{Float64}, ω::Vector{Float64}, B::Matrix{Float64}, Bout::Matrix{Float64}, P::Matrix{Float64}, W::Matrix{Float64}, δ::Float64, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float64,Float64},Vector{Tuple{Float64,Float64}}}, s::Union{Float64,Vector{Float64}}=1.)`
 
-Iteration functions whose fixed points are solutions to the Dissipative Flow Network problem [Delabays et al. (2022)]. 
+Iteration functions whose fixed points are solutions to the Dissipative Flow Network problem [Delabays, Jafarpour, and Bullo (2022)]. 
 
 **INPUT**:\
 `Δ`: Argument of the interation function. \
@@ -345,10 +345,10 @@ Iteration functions whose fixed points are solutions to the Dissipative Flow Net
 
 - `targets(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}})`
 
-Given an incidence matrix for an acyclic graph, with indexing satisfying the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo (2021)], returns, for each node i: (1) The unique node j > i to which it is connected; (2) The list of nodes j < i that are connected to it.
+Given an incidence matrix for an acyclic graph, with indexing satisfying the assumptions of `acyclic_algorithm`, returns, for each node i: (1) The unique node j > i to which it is connected; (2) The list of nodes j < i that are connected to it.
 
 **INPUT**:\
-`B`: Incidence matrix of the graph. The graph is assumed connected and acyclic, and its numbering is assumed to satisfy the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo (2021)].
+`B`: Incidence matrix of the graph. The graph is assumed connected and acyclic, and its numbering is assumed to satisfy the assumptions of `acyclic_algorithm`.
 
 **OUTPUT**:\
 `te`: Dictionary associating to each node i = 1:n-1, the unique node with larger index to which it is connected.\
@@ -359,7 +359,7 @@ Given an incidence matrix for an acyclic graph, with indexing satisfying the ass
 ### winding
 *./toolbox.jl*
 
-- `winding(θ::Vector{Float64}, Σ::Vector{Int64})`
+- `winding(θ::Vector{Float64}, σ::Vector{Int64})`
 
 Computes the winding number associated to the state `θ` around the cycle `σ`. 
 
