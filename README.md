@@ -1,5 +1,5 @@
 # DFNSolvers
-Companion codes to the paper [Delabays, Jafarpour, and Bullo, *arXiv preprint: 2202.02439* (2022)](arxiv.org/abs/2202.02439). 
+Companion codes to the paper [Delabays, Jafarpour, and Bullo, *arXiv preprint: 2202.02439* (2022)](https://arxiv.org/abs/2202.02439). 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
 [![DOI](https://zenodo.org/badge/439436014.svg)](https://zenodo.org/badge/latestdoi/439436014)
@@ -167,7 +167,7 @@ Extended coupling function, extending `h` to the whole real axis. Matches `h` on
 `s`: Slope of the extended coupling function outside of the domain of `h`. \
 
 **OUTPUT**:\
-`hx`: h_s(x).
+`hx`: h\_s(x).
 
 **Variations**:
 
@@ -230,7 +230,7 @@ Compute an incidence matrix associated to a Laplacian matrix.
 
 - `load_ksagaguchi(as::Vector{Float64},ϕs::Vector{Float64})`
 
-Loads the Kuramoto-Sakaguchi coupling functions, ready to use in the acyclic_algorithm script.
+Loads the Kuramoto-Sakaguchi coupling functions, ready to use in the acyclic\_algorithm script.
 
 **INPUT 1**:\
 `as`: Vector of coupling weights, ordered according to the edge indexing in the incidence matrix. The vector `as` is of dimension 2m, as the two orientations of each edge are distiguished. If the edge e=(i,j), then the index of edge (j,i) is e+m. \
