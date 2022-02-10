@@ -1,5 +1,5 @@
 # DFNSolvers
-Companion codes to the paper [Delabays, Jafarpour, and Bullo *under preparation* (2022)]. 
+Companion codes to the paper [Delabays, Jafarpour, and Bullo, *arXiv preprint: 2202.02439* (2022)](arxiv.org/abs/2202.02439). 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
 [![DOI](https://zenodo.org/badge/439436014.svg)](https://zenodo.org/badge/latestdoi/439436014)
@@ -37,7 +37,7 @@ Solves the Dissipative Flow Network problem for general graph structures.
 ### acyclic\_aglorithm
 *./acyclic\_algorithm.jl*
 
-- `acyclic\_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)`
+- `acyclic\_algorithm(B::Union{Matrix{Float64}, SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)`
 	
 Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2022)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
 
@@ -74,7 +74,7 @@ Computes the maximal (in absolute value) angular difference over the edges, usgi
 ### cohesiveness\_inc
 *./toolbox.jl*
 
-`cohesiveness_inc(θ::Vector{Float64}, B::Matrix{Float64})`
+- `cohesiveness_inc(θ::Vector{Float64}, B::Matrix{Float64})`
 
 Computes the maximal (in absolute value) angular difference over the edges, using the incidence matrix of the graph `B`.
 
