@@ -5,7 +5,7 @@ include("toolbox.jl")
 	run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, ω::Vector{Float64}, h::Function, hi::Function, γ::Tuple{Float64,Float64})
 	run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, ω::Vector{Float64}, h::Vector{Function}, hi::Vector{Function}, γ::Vector{Tuple{Float64,Float64}})
 
-Runs the algorithm to decide if a solution exist for the Dissipative Flow Problem [Delabays et al. (2022)] on an acyclic graph. The nodes and edges of the graph are first reordered in order to match requirements described in the paper. Then the original numbering is retrieved.
+Runs the algorithm to decide if a solution exist for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)] on an acyclic graph. The nodes and edges of the graph are first reordered in order to match requirements described in the paper. Then the original numbering is retrieved.
 
 _INPUT_:\\
 `B`: Incidence matrix of the graph considered, with n vertices and m edges. The graph is considered undirected and unweighted (weights can be incorporated in the coupling functions).\\
@@ -15,7 +15,7 @@ _INPUT_:\\
 `γ`: Tuple(s) of the lower and upper bounds on the argument of the coupling function(s) `h`, such that they are strictly increasing. Dimension is the same as `h`.
 
 _OUTPUT_:\\
-`exists`: Returns true only if a solution exists. If the solution exists, then it is unique [Delabays, Jafarpour, and Bullo (2021)].\\
+`exists`: Returns true only if a solution exists. If the solution exists, then it is unique [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)].\\
 `θ`: Solution (if it exists) of the Dissipative Flow Network problem, defined up to a constant angle shift. \\ 
 `ff`: Vector (of dimension 2m) of flows on the edges. For e = 1:m (resp. e = m+1:2*m), ff[e] is the flow over the edge defined by B0[:,e] (resp. -B0[:,e]).\\
 `φ`: Synchronous frequency corresponding to the solution. 
@@ -53,7 +53,7 @@ function run_acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,
 		return nothing
 	end
 
-	# Sort nodes and edges in order to satisfy the assumptions of Theorem XXX [Delabays, Jafarpour, and Bullo (2021)].
+	# Sort nodes and edges in order to satisfy the assumptions of Theorem 3 [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)].
 	B0,id,ed = reindex([B -B])
 	B1 = B0[:,1:m]
 	ω1 = ω[id]
@@ -102,17 +102,17 @@ end
 """
 	acyclic_algorithm(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, H::Vector{Function}, ω::Vector{Float64}, hγ::Vector{Tuple{Float64,Float64}}, ϵ::Float64=1e-10)
 	
-Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo (2021)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
+Recursive algorithm determining the existence of a unique solution for the Dissipative Flow Problem [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)] on an acyclic graph. The algorithm requires the nodes and edges to be indexed as described in the original paper.
 
 _INPUT_:\\
-`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays, Jafarpour, and Bullo (2021)]. \\
+`B`: Incidence matrix of the graph considered. The nodes and edges are assumed to ordered according to the requirements of the original reference [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)]. \\
 `ω`: Vector of natural frequencies of the oscillators.\\
 `H`: Vector (of dimension 2m) of the transfer functions, relating the flows over the two orientations of the edges. For e = 1:m, H[e](f) = h[e](h[e+m]^{-1}(f)) and for e = m+1:2*m, H[e](f) = h[e](h[e-m]^{-1}(f)). \\
 `hγ`: Vector of tuples of the lower and upper bounds of the domain of the transfer functions.\\
 `ϵ`: Correction parameter to avoid evaluating the transfer functions exactly at the boundary of their domain.
 
 _OUTPUT_:\\
-`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays, Jafarpour, and Bullo (2021)].\\
+`exists`: Returns true if a solution exists. If it does, then it is unique [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)].\\
 `ff`: Vector (of dimension 2m) of flows on the edges, solving the Dissipative Flow Problem. For e = 1:m (resp. e = m+1:2*m), ff[e] is the
   flow over the edge defined by B0:,e (resp. -B0[:,e]).\\
 `φ`: Synchronous frequency corresponding the solution.

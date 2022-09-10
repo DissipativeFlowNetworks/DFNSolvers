@@ -297,7 +297,7 @@ end
 """
 	reindex(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}}, id::Vector{Int64}=Int64[], ed::Vector{Int64}=Int64[])
 
-Re-orders the nodes and edges of the graph to satisfy the conditions for Theorem XXX [Delabays, Jafarpour, and Bullo (2021)] to apply. 
+Re-orders the nodes and edges of the graph to satisfy the conditions for Theorem XXX [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)] to apply. 
 
 _INPUT_:\\
 `B`: Incidence matrix of the _bidirected_ graph. \\
@@ -393,12 +393,12 @@ end
 """
 	targets(B::Union{Matrix{Float64},SparseMatrixCSC{Float64,Int64}})
 
-Given an incidence matrix for an acyclic graph, with indexing satisfying the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo (2021)], returns, for each node i:\\
+Given an incidence matrix for an acyclic graph, with indexing satisfying the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)], returns, for each node i:\\
 - The unique node j>i to which it is connected;\\
 - The list of nodes j<i that are connected to it.
 
 _INPUT_:\\
-`B`: Incidence matrix of the graph. The graph is assumed connected and acyclic, and its numbering is assumed to satisfy the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo (2021)].
+`B`: Incidence matrix of the graph. The graph is assumed connected and acyclic, and its numbering is assumed to satisfy the assumptions of Theorem XXX in [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)].
 
 _OUTPUT_:\\
 `te`: Dictionary associating to each node i = 1:n-1, the unique node with larger index to which it is connected.\\

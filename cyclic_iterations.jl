@@ -6,12 +6,12 @@ include("toolbox.jl")
 """
 	iterations(Δ0::Vector{Float64}, B::Matrix{Float64}, C::Matrix{Float64}, u::Vector{Int64}, ω::Vector{Float64}, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float,Float64},Vector{Tuple{Float64,Float64}}}, δ::Float64, s::Union{Float64,Vector{Float64}}=1., max_iter::Int64=100, tol::Float64=1e-6, verb::Bool=false)
 
-Runs the iteration scheme described in [Delabays et al. (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
+Runs the iteration scheme described in [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)] for cyclic networks of diffusively coupled oscillators. Starts at initial conditions `Δ0`, which is projected on the afine subspace ker(B)^perp + 2π*pinv(`C`)*`u`. The script runs for at most `max_iter` iterations or until the correction is smaller than `tol`.
 
 _INPUT_:\\
 `Δ0`: Initial conditions of the iterations. Each component should ideally be bounded by the corresponding components of `γ`. \\
 `B`: Incidence matrix of the (undirected) graph. \\
-`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays et al. (2022)]. \\
+`C`: Cycle-edge incidence matrix associated to the cycle basis of the graph (see [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)]. \\
 `u`: Winding vector of the cell where the solution is searched. \\
 `ω`: Vector of natural frequencies. \\
 `h`: Vector of coupling functions over the (bidirected) edges of the graph. If a single function is given, the couplings are assumed homogeneous. \\
@@ -74,15 +74,15 @@ end
 """
 	Sδ(Δ::Vector{Float64}, ω::Vector{Float64}, B::Matrix{Float64}, Bout::Matrix{Float64}, P::Matrix{Float64}, W::Matrix{Float64}, δ::Float64, h::Union{Function,Vector{Function}}, γ::Union{Tuple{Float64,Float64},Vector{Tuple{Float64,Float64}}}, s::Union{Float64,Vector{Float64}}=1.)
 
-Iteration functions whose fixed points are solutions to the Dissipative Network Flow problem [Delabays et al. (2022)]. 
+Iteration functions whose fixed points are solutions to the Dissipative Network Flow problem [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)]. 
 
 _INPUT_:\\
 `Δ`: Argument of the interation function. \\
 `ω`: Vector of natural frequencies. \\
 `B`: Incidence matrix of the (undirected) graph. \\
 `Bout`: Out-incidence matrix of the bidirected graph. \\
-`P`: Cycle projection matrix (see [Delabays et al. (2022)]. \\
-`W`: Weight matrix to be tuned. In [Delabays et al. (2022)], we take the pseudoinverse of the Laplacian. \\
+`P`: Cycle projection matrix (see [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)]. \\
+`W`: Weight matrix to be tuned. In [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)], we take the pseudoinverse of the Laplacian. \\
 `δ`: Scaling parameter which, if small enough, guarantees `Sδ` to be contracting. \\
 `h`: Vector of the (directed) coupling functions. If a single `Function` is given, the couplings are assumed homogeneous. \\
 `γ`: Vector of tuples composed of the lower (1st comp.) and upper (2nd comp.) bounds on the domain of `h`, such that it is stricly increasing. Should have the same dimension as `h`. \\
