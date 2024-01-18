@@ -2,7 +2,8 @@
 Companion codes to the paper [Delabays, Jafarpour, and Bullo, Nat. Commun. 13 (2022)](https://doi.org/10.1038/s41467-022-32931-8). 
 Solves the Dissipative Flow Network problem for general graph structures. 
 
-[![DOI](https://zenodo.org/badge/439436014.svg)](https://zenodo.org/badge/latestdoi/439436014)
+[![DOI](https://zenodo.org/badge/439436014.svg)](https://zenodo.org/doi/10.5281/zenodo.5899407)
+
 
 
 ## Summary of the files
